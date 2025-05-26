@@ -6,7 +6,7 @@
   --primary: #00ffff;
   --accent: #ffd700;
   --bg-skill: #020b1b;
-  --neon-glow: 0 0 8px rgba(255,255,0,0.8);
+8  --neon-glow: 0 0 8px rgba(255,255,0,0.8);
 }
 
 * {
@@ -326,4 +326,4 @@ section.contact {
   background:darkred;
   transform:scale(1.05);
   box-shadow:0 0 30px rgba(255,0,0,0.8);
-  }/* CSS do site aqui */
+  }
