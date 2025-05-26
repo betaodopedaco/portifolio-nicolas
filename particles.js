@@ -1,47 +1,38 @@
-const cfC = document.getElementById('confettiCanvas');
-const cfCtx = cfC.getContext('2d');
-let confs = [];
+const bgC = document.getElementById('bgCanvas');
+const bgCtx = bgC.getContext('2d');
+let bgP = [];
 
-function initCF() {
-  cfC.width = window.innerWidth;
-  cfC.height = window.innerHeight;
+function initBG() {
+  bgC.width = window.innerWidth;
+  bgC.height = window.innerHeight;
+  bgP = Array.from({ length: 80 }, () => ({
+    x: Math.random() * bgC.width,
+    y: Math.random() * bgC.height,
+    size: Math.random() * 2 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5,
+    color: ['#FFD700', '#FF0000', '#FFFFFF', '#000000'][Math.floor(Math.random() * 4)]
+  }));
 }
 
-function startConfetti() {
-  for (let i = 0; i < 150; i++) {
-    confs.push({
-      x: Math.random() * cfC.width,
-      y: Math.random() * -cfC.height,
-      size: Math.random() * 8 + 4,
-      dx: (Math.random() - 0.5) * 5,
-      dy: Math.random() * 8 + 4,
-      rot: Math.random() * 360,
-      spin: (Math.random() - 0.5) * 10,
-      color: ['#FFD700', '#FF0000', '#FFFFFF', '#000000'][Math.floor(Math.random() * 4)]
-    });
-  }
-  setTimeout(() => window.open('https://wa.me/5581984027098', '_blank'), 1000);
-}
+function animBG() {
+  bgCtx.clearRect(0, 0, bgC.width, bgC.height);
+  bgP.forEach(p => {
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0) p.x = bgC.width;
+    if (p.x > bgC.width) p.x = 0;
+    if (p.y < 0) p.y = bgC.height;
+    if (p.y > bgC.height) p.y = 0;
 
-function animCF() {
-  cfCtx.clearRect(0, 0, cfC.width, cfC.height);
-  confs.forEach(c => {
-    c.x += c.dx;
-    c.y += c.dy;
-    c.rot += c.spin;
-    cfCtx.save();
-    cfCtx.translate(c.x, c.y);
-    cfCtx.rotate(c.rot * Math.PI / 180);
-    cfCtx.fillStyle = c.color;
-    cfCtx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
-    cfCtx.restore();
+    bgCtx.beginPath();
+    bgCtx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+    bgCtx.fillStyle = p.color;
+    bgCtx.fill();
   });
-  confs = confs.filter(c => c.y < cfC.height + 20);
-  requestAnimationFrame(animCF);
+  requestAnimationFrame(animBG);
 }
 
-initCF();
-animCF();
-window.addEventListener('resize', initCF);
-
-document.querySelector('.contact-content .buttons .button').addEventListener('click', startConfetti);// Partículas e constelações
+initBG();
+animBG();
+window.addEventListener('resize', initBG);
